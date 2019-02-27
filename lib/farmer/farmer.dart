@@ -31,7 +31,75 @@ class _FarmerState extends State<Farmer> {
           style: TextStyle(color: Colors.black, fontSize: 25.0),
         ),
       ),
-      drawer: Drawer(
+      drawer: Maindrawer(),
+      body: Newstile(),
+    );
+  }
+}
+
+
+class Menubutton extends StatefulWidget {
+  String name;
+  double fontsize =20.0;
+  bool isPressed =false;
+  IconData icon;
+  Menubutton({this.fontsize,this.icon,this.isPressed,this.name});
+  @override
+  _MenubuttonState createState() => _MenubuttonState();
+}
+
+class _MenubuttonState extends State<Menubutton> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: (){},
+      title: Text(widget.name,style: TextStyle(
+        fontWeight: widget.isPressed==true?FontWeight.bold:FontWeight.normal,
+        fontSize: widget.fontsize
+      ),),
+      leading: widget.icon!=null?Icon(widget.icon):null,
+    );
+  }
+}
+
+class Newstile extends StatefulWidget {
+  bool darkBackground =false;
+  Newstile({this.darkBackground});
+  @override
+  _NewstileState createState() => _NewstileState();
+}
+
+class _NewstileState extends State<Newstile> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 5.0,
+            color: Colors.redAccent,
+            spreadRadius: 7.0
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(8.0),
+      height: 100.0,
+      margin: EdgeInsets.all(5.0),
+      child: Center(child: Text("Test"),),
+    );
+  }
+}
+
+class Maindrawer extends StatefulWidget {
+  @override
+  _MaindrawerState createState() => _MaindrawerState();
+}
+
+class _MaindrawerState extends State<Maindrawer> {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,61 +192,6 @@ class _FarmerState extends State<Farmer> {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-
-class Menubutton extends StatefulWidget {
-  String name;
-  double fontsize =20.0;
-  bool isPressed =false;
-  IconData icon;
-  Menubutton({this.fontsize,this.icon,this.isPressed,this.name});
-  @override
-  _MenubuttonState createState() => _MenubuttonState();
-}
-
-class _MenubuttonState extends State<Menubutton> {
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: (){},
-      title: Text(widget.name,style: TextStyle(
-        fontWeight: widget.isPressed==true?FontWeight.bold:FontWeight.normal,
-        fontSize: widget.fontsize
-      ),),
-      leading: widget.icon!=null?Icon(widget.icon):null,
-    );
-  }
-}
-
-class Newstile extends StatefulWidget {
-  bool darkBackground =false;
-  Newstile({this.darkBackground});
-  @override
-  _NewstileState createState() => _NewstileState();
-}
-
-class _NewstileState extends State<Newstile> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 5.0,
-            color: Colors.redAccent,
-            spreadRadius: 7.0
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(8.0),
-      height: 300.0,
-      margin: EdgeInsets.all(5.0),
-      child: ,
-    );
+      );
   }
 }
