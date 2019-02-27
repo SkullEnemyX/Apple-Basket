@@ -36,6 +36,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
+    final height =MediaQuery.of(context).size.height;
+    final width =MediaQuery.of(context).size.width;
     return Scaffold(
             backgroundColor: Color.fromARGB(255, 253, 253, 253),
             body: Column(
@@ -46,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   children: <Widget>[
                    Image.asset("assets/vector.png"),
                     SizedBox(
-                      height: 50,
+                      height: height/14,
                     ),
                     Row(children: <Widget>[
                       SizedBox(
@@ -61,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                     ]),
                     SizedBox(
-                      height: 50.0,
+                      height: height/14,
                     ),
                     Row(
                       children: <Widget>[
@@ -75,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ],
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: height/12,
                     ),
                     Center(
                       child: Container(

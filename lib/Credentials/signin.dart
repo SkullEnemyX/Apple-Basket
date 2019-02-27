@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(
-            height: 30.0,
+            height: height/14,
           ),
           Row(children: <Widget>[
             SizedBox(
@@ -66,7 +66,7 @@ class _LoginState extends State<Login> {
             ),
           ]),
           SizedBox(
-            height: 50.0,
+            height: height/12,
           ),
           Row(
             children: <Widget>[
@@ -183,7 +183,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       SizedBox(
-                        height: height/8,
+                        height: 50.0,
                       ),
                       Row(
                         children: <Widget>[
