@@ -1,45 +1,24 @@
-import 'package:apple/farmer/dashboard.dart';
-import 'package:apple/farmer/news.dart';
-import 'package:apple/farmer/prices.dart';
+import 'package:apple/broker/dashboard.dart';
+import 'package:apple/broker/news.dart';
 import 'package:apple/farmer/profile.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:apple/common/feedback.dart';
-class Farmer extends StatefulWidget {
+
+class Broker extends StatefulWidget {
   final String name;
   final String email;
-  Farmer({this.name,this.email});
+  Broker({this.email,this.name});
   @override
-  _FarmerState createState() => _FarmerState();
+  _BrokerState createState() => _BrokerState();
 }
 
-class _FarmerState extends State<Farmer> {
-  Future<List> getCurrencies() async {
-  String apiUrl = 'https://api.coinmarketcap.com/v1/ticker/?limit=50';
-  http.Response response = await http.get(apiUrl);
-  return json.decode(response.body);
-}
-  List currencies;
-  @override
-  void initState(){
-    // TODO: implement initState
-    super.initState();
-    fetch();
-  }
+class _BrokerState extends State<Broker> {
 
-  fetch() async{
-    currencies = await getCurrencies();
-  }
-  //Declarations
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int selected = 0;
   int currentPressed = 1;
   List<Widget> listItems = [];
   int selectedIndex = 0;
   int bodySection = 1;
-  
 
   getScreen(int ind,int id){
     if(id==1){
@@ -49,25 +28,31 @@ class _FarmerState extends State<Farmer> {
       email: widget.email,
     );
     else if(ind ==1)
-    return Newstile();
+    return NewsPage(
+      name: widget.name,
+      userpic: widget.email,
+    );
     else if(ind ==2)
-    return CryptoListWidget(currencies);
+    return Container();
     else 
     return Container();
     }
     else if(id==2)
     {
-      return FeedInfo();
+      return Container();
     }
     else
-    return FeedInfo();
+    return Container();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    final titles = ['Dashboard','News','Prices','Connect'];
-    final icons = [Icons.dashboard,Icons.library_books,Icons.trending_up,Icons.portrait];
-    for(var i=0;i<4;i++)
+    final titles = ['Dashboard','News','Prices'];
+    final icons = [Icons.dashboard,Icons.library_books,Icons.trending_up];
+    for(var i=0;i<3;i++)
     {
       listItems.add(
         InkWell(
@@ -121,7 +106,7 @@ class _FarmerState extends State<Farmer> {
             child: Center(
                 child: CircleAvatar(
               radius: 50.0,
-              backgroundImage: AssetImage("daksh.jpg"),
+              backgroundImage: NetworkImage("https://cdn0.iconfinder.com/data/icons/user-interface-33/80/App_Interface_new-07-512.png"),
               foregroundColor: Colors.orange.shade100,
               backgroundColor: Colors.transparent,
             )), 

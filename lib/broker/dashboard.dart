@@ -10,7 +10,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
 
-  final gridItems = ["Price Monitor","Latest News","Connect with farmers like you"];
+  final gridItems = ["Manipulate Prices","Spread News","Meet brokers like you"];
 
 
   @override
@@ -46,7 +46,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                        child: Text("You are in good shape to spend this week!",
+                        child: Text("Share real time news , prices and more as a broker!",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40.0
@@ -102,7 +102,7 @@ class _DashboardState extends State<Dashboard> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Icon(Icons.library_books,color: Colors.blue,),
-                            Text("News and updates")
+                            Text("Share News")
                           ],
                         ),
                       ),
@@ -125,7 +125,7 @@ class _DashboardState extends State<Dashboard> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Icon(Icons.trending_up,color: Colors.green,),
-                            Text("Price Dynamics")
+                            Text("Manipulate Prices")
                           ],
                         ),
                       ),
@@ -152,7 +152,7 @@ class _DashboardState extends State<Dashboard> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               Icon(Icons.people_outline,color: Colors.purple,),
-                              Text("Connect with farmers like you")
+                              Text("Connect with brokers and farmers like you")
                             ],
                           ),
                         ),

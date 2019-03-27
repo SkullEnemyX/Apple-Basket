@@ -1,12 +1,9 @@
-//import 'package:apple/Credentials/signin.dart';
-import 'dart:async';
-
-import 'package:apple/broker/broker.dart';
 import 'package:apple/farmer/farmer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
+class FeedbackInfo{
+
+}
 class UserData {
   String displayName;
   String email;
@@ -16,122 +13,34 @@ class UserData {
   UserData({this.displayName, this.email, this.uid, this.password});
 }
 
-class Userauthentication {
-  String message = "Account created successfully";
-  Future<String> createUser(UserData userdata) async {
-    FirebaseUser _auth =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: userdata.email,
-      password: userdata.password,
-    );
-    return "${_auth.uid}";
-  }
-
-  Future<String> verifyuser(UserData userdata) async {
-    FirebaseUser _auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: userdata.email, password: userdata.password);
-    return "${_auth.uid}";
-  }
-
-  logout(UserData userdata) async {
-    FirebaseAuth.instance.signOut();
-  }
-}
-
-class Signup extends StatefulWidget {
-  String usertype;
-  Signup({this.usertype});
+class FeedInfo extends StatefulWidget {
   @override
-  _SignupState createState() => _SignupState();
+  _FeedInfoState createState() => _FeedInfoState();
 }
 
-class _SignupState extends State<Signup> {
+class _FeedInfoState extends State<FeedInfo> {
   final formKey = new GlobalKey<FormState>();
-  UserData userData = new UserData();
-  final Userauthentication userAuth = new Userauthentication();
+  UserData userData = UserData();
   AnimationController _loginButtonController;
   Animation<double> buttonSqueezeAnimation;
   bool _isobscured = true;
   Color _eyeButtonColor = Colors.grey;
 
-  void _submit() {
-    final form = formKey.currentState;
-
-    if (form.validate()) {
-      form.save();
-      performSignup();
-      //   //textcontrol();
-    }
-  }
-
-  void performSignup() async {
-    List<String> error;
-    final DocumentReference documentReference =
-        Firestore.instance.document("Users/${userData.email}");
-    if (userData.email != null &&
-        userData.password != null &&
-        userData.displayName != null) {
-      try {
-        setState(() {});
-        await userAuth.createUser(userData);
-        Map<String, dynamic> userinfo = <String, dynamic>{
-          "name": "${userData.displayName}",
-          "email": "${userData.email}",
-        };
-        documentReference.setData(userinfo).whenComplete(() {
-          print("Document Added");
-        }).catchError((e) => print(e));
-        Timer(
-            Duration(milliseconds: 400),
-            () => widget.usertype == "Farmer"
-                ? Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Farmer(
-                      name: userData.displayName,
-                      email: userData.email,
-                    )))
-                : Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Broker(
-                      name: userData.displayName,
-                      email: userData.email,
-                    ))));
-      } catch (e) {
-        print('Error: $e');
-      }
-    } else {
-      print("Failed");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    double height =MediaQuery.of(context).size.height;
+    double width =MediaQuery.of(context).size.width;
     return Center(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              size: 25.0,
-              color: Colors.redAccent,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
         body: ListView(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: 30.0,
             ),
-            Row(children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
               SizedBox(
                 width: 30.0,
               ),
@@ -149,7 +58,7 @@ class _SignupState extends State<Signup> {
             Row(
               children: <Widget>[
                 SizedBox(
-                  width: width / 14,
+                  width: width/14,
                 ),
                 Text(
                   "Hello there! \nLucky to have you with us.",
@@ -187,11 +96,10 @@ class _SignupState extends State<Signup> {
                           onSaved: (val) => userData.displayName = val,
                         ),
                         SizedBox(
-                          height: height / 35,
+                          height: height/35,
                         ),
                         new TextFormField(
-                          decoration:
-                              InputDecoration(labelText: "Email Address"),
+                          decoration: InputDecoration(labelText: "Email Address"),
                           validator: (val) =>
                               val.isEmpty || val.substring(0) == null
                                   ? 'Email field is empty'
@@ -200,7 +108,19 @@ class _SignupState extends State<Signup> {
                           onSaved: (val) => userData.email = val,
                         ),
                         SizedBox(
-                          height: height / 35,
+                          height: height/35,
+                        ),
+                        new TextFormField(
+                          decoration: InputDecoration(labelText: "Phone Number"),
+                          validator: (val) =>
+                              val.isEmpty || val.substring(0) == null
+                                  ? 'Contact number cannot be empty'
+                                  : null,
+                          keyboardType: TextInputType.phone,
+                          onSaved: (val) => userData.email = val,
+                        ),
+                        SizedBox(
+                          height: height/35,
                         ),
                         new TextFormField(
                           decoration: InputDecoration(
@@ -254,7 +174,9 @@ class _SignupState extends State<Signup> {
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(5.0),
                           child: InkWell(
-                            onTap: _submit,
+                            onTap: () {
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Farmer()));
+                            },
                             child: Container(
                               height: 50.0,
                               child: Center(
@@ -273,7 +195,7 @@ class _SignupState extends State<Signup> {
                         Row(
                           children: <Widget>[
                             SizedBox(
-                              width: width / 14,
+                              width: width/14,
                             ),
                             Text(
                               "Already have an account?",

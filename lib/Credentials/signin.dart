@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:apple/Credentials/signup.dart';
+import 'package:apple/broker/broker.dart';
 import 'package:apple/farmer/farmer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserData {
@@ -9,6 +14,28 @@ class UserData {
   String password;
 
   UserData({this.displayName, this.email, this.uid, this.password});
+}
+
+class Userauthentication {
+  String message = "Account created successfully";
+  Future<String> createUser(UserData userdata) async {
+    FirebaseUser _auth =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: userdata.email,
+      password: userdata.password,
+    );
+    return "${_auth.uid}";
+  }
+
+  Future<String> verifyuser(UserData userdata) async {
+    FirebaseUser _auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: userdata.email, password: userdata.password);
+    return "${_auth.uid}";
+  }
+
+  logout(UserData userdata) async {
+    FirebaseAuth.instance.signOut();
+  }
 }
 
 class Login extends StatefulWidget {
@@ -25,6 +52,57 @@ class _LoginState extends State<Login> {
   Animation<double> buttonSqueezeAnimation;
   bool _isobscured = true;
   Color _eyeButtonColor = Colors.grey;
+  final Userauthentication userAuth = new Userauthentication();
+
+  void _submit() {
+    final form = formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+      performlogin();
+      //   //textcontrol();
+    }
+  }
+
+  void performlogin() async {
+    String _uid;
+    List<String> error;
+    final DocumentReference documentReference =
+        Firestore.instance.document("Users/${userData.email}");
+
+    await documentReference.get().then((snapshot) {
+      if (snapshot.exists) {
+        userData.email = snapshot.data['email'];
+        userData.displayName = snapshot.data['name'];
+      }
+    });
+    try {
+      setState(() {});
+      _uid = await userAuth.verifyuser(userData);
+      print(_uid);
+      if (_uid != null) {
+        Timer(
+            Duration(milliseconds: 400),
+            () => widget.usertype == "Farmer"
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Farmer(
+                              name: userData.displayName,
+                              email: userData.email,
+                            )))
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Broker(
+                              name: userData.displayName,
+                              email: userData.email,
+                            ))));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +129,7 @@ class _LoginState extends State<Login> {
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(
-            height: height/14,
+            height: height / 14,
           ),
           Row(children: <Widget>[
             SizedBox(
@@ -66,12 +144,12 @@ class _LoginState extends State<Login> {
             ),
           ]),
           SizedBox(
-            height: height/12,
+            height: height / 12,
           ),
           Row(
             children: <Widget>[
               SizedBox(
-                width: width/14,
+                width: width / 14,
               ),
               Text(
                 "Hello there! \nConnect With People",
@@ -80,7 +158,7 @@ class _LoginState extends State<Login> {
             ],
           ),
           SizedBox(
-            height: height/14,
+            height: height / 14,
           ),
           Form(
             key: formKey,
@@ -109,7 +187,7 @@ class _LoginState extends State<Login> {
                         onSaved: (val) => userData.email = val,
                       ),
                       SizedBox(
-                        height: height/35,
+                        height: height / 35,
                       ),
                       new TextFormField(
                         decoration: InputDecoration(
@@ -157,19 +235,14 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       SizedBox(
-                        height: height/7,
+                        height: height / 7,
                       ),
                       Material(
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.redAccent,
                         child: InkWell(
                           splashColor: Colors.red,
-                          onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Farmer()));
-                          },
+                          onTap: _submit,
                           child: Container(
                             height: 50.0,
                             child: Center(
@@ -188,7 +261,7 @@ class _LoginState extends State<Login> {
                       Row(
                         children: <Widget>[
                           SizedBox(
-                            width: width/14,
+                            width: width / 14,
                           ),
                           Text(
                             "Don't have an account?",
@@ -198,7 +271,8 @@ class _LoginState extends State<Login> {
                             onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Signup())),
+                                    builder: (context) =>
+                                        Signup(usertype: widget.usertype))),
                             child: Text(
                               " Register",
                               style: TextStyle(color: Colors.grey.shade900),

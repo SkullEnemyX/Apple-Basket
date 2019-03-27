@@ -36,19 +36,18 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    final height =MediaQuery.of(context).size.height;
-    final width =MediaQuery.of(context).size.width;
     return Scaffold(
             backgroundColor: Color.fromARGB(255, 253, 253, 253),
             body: Column(
               children: <Widget>[
+                Expanded(child: Container(),),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                    Image.asset("assets/vector.png"),
                     SizedBox(
-                      height: height/14,
+                      height: 50.0,
                     ),
                     Row(children: <Widget>[
                       SizedBox(
@@ -63,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                     ]),
                     SizedBox(
-                      height: height/14,
+                      height: 50.0,
                     ),
                     Row(
                       children: <Widget>[
@@ -77,16 +76,17 @@ class _SplashScreenState extends State<SplashScreen> {
                       ],
                     ),
                     SizedBox(
-                      height: height/12,
+                      height: 30.0,
                     ),
                     Center(
                       child: Container(
+                        padding: const EdgeInsets.all(30.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             InkWell(
                               onTap: ()=>
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login(
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Login(
                                   usertype: "Farmer",
                                 ))),
                               
@@ -108,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             ),
                             InkWell(
                               onTap: (){
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login(
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Login(
                                   usertype: "Broker",
                                 )));
                               },
@@ -131,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
