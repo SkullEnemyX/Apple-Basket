@@ -1,5 +1,6 @@
 import 'package:apple/broker/dashboard.dart';
 import 'package:apple/broker/news.dart';
+import 'package:apple/broker/prices.dart';
 import 'package:apple/farmer/profile.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _BrokerState extends State<Broker> {
       userpic: widget.email,
     );
     else if(ind ==2)
-    return Container();
+    return Prices();
     else 
     return Container();
     }

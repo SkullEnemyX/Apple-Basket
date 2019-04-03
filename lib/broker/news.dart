@@ -42,13 +42,13 @@ class _NewsPageState extends State<NewsPage> {
 
   publishArticle() async{
     final DocumentReference documentReference =
-        Firestore.instance.document("News/${newsdata.displayName}");
+        Firestore.instance.document("News/${DateTime.now().millisecondsSinceEpoch.toString()}");
     if(newsdata.news!=null)
     {
       try{
         Map<String, dynamic> userinfo = <String, dynamic>{
           "name": "${newsdata.displayName}",
-          "photoid": "${url}",
+          "photoid": "$url",
           "userpic": "${newsdata.userpic}",
           "news": "${newsdata.news}",
           "location": "${newsdata.location}"
@@ -72,7 +72,7 @@ class _NewsPageState extends State<NewsPage> {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     //Create a reference to the location you want to upload to in firebase
-    StorageReference reference = _storage.ref().child("images/");
+    StorageReference reference = _storage.ref().child("News/${DateTime.now().millisecondsSinceEpoch.toString()}");
 
     //Upload the file to firebase
     StorageUploadTask uploadTask = reference.putFile(image);

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:apple/Credentials/signup.dart';
 import 'package:apple/broker/broker.dart';
 import 'package:apple/farmer/farmer.dart';
@@ -39,22 +39,26 @@ class Userauthentication {
 }
 
 class Login extends StatefulWidget {
-  String usertype = "Default";
-  Login({this.usertype});
+  final String usertype;
+  Login({this.usertype = 'Default'});
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
+  bool signinInitiated = false;
   UserData userData = new UserData();
-  AnimationController _loginButtonController;
   Animation<double> buttonSqueezeAnimation;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isobscured = true;
   Color _eyeButtonColor = Colors.grey;
   final Userauthentication userAuth = new Userauthentication();
 
   void _submit() {
+    setState(() {
+      signinInitiated = true;
+    });
     final form = formKey.currentState;
 
     if (form.validate()) {
@@ -67,6 +71,9 @@ class _LoginState extends State<Login> {
   void performlogin() async {
     String _uid;
     List<String> error;
+    final snackbar1 = new SnackBar(
+      content: Text("Sign in successful"), //replace name with database name.
+    );
     final DocumentReference documentReference =
         Firestore.instance.document("Users/${userData.email}");
 
@@ -80,7 +87,11 @@ class _LoginState extends State<Login> {
       setState(() {});
       _uid = await userAuth.verifyuser(userData);
       print(_uid);
+      setState(() {
+        signinInitiated = false;
+      });
       if (_uid != null) {
+        _scaffoldKey.currentState.showSnackBar(snackbar1);
         Timer(
             Duration(milliseconds: 400),
             () => widget.usertype == "Farmer"
@@ -98,10 +109,24 @@ class _LoginState extends State<Login> {
                               name: userData.displayName,
                               email: userData.email,
                             ))));
+      } else {
+        final snackbar2 = new SnackBar(
+          content: Text("Sign in failed!"),
+        );
+        _scaffoldKey.currentState.showSnackBar(snackbar2);
       }
     } catch (e) {
+      error = e.toString().split("(");
+      error = error[1].toString().split(",");
+      final snackbar2 = new SnackBar(
+        content: Text("Sign in failed!\nReason: ${error[1].toString()}"),
+      );
+      _scaffoldKey.currentState.showSnackBar(snackbar2);
       print(e);
     }
+    setState(() {
+      signinInitiated = false;
+    });
   }
 
   @override
@@ -110,6 +135,7 @@ class _LoginState extends State<Login> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.white,
@@ -234,15 +260,24 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: height / 7,
-                      ),
+                      SizedBox(height: 30.0),
+                      signinInitiated
+                          ? SpinKitRing(
+                              color: Colors.redAccent,
+                              lineWidth: 3.0,
+                            )
+                          : SizedBox(
+                              height: 0.0,
+                            ),
+                      SizedBox(height: 30.0),
                       Material(
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.redAccent,
                         child: InkWell(
                           splashColor: Colors.red,
-                          onTap: _submit,
+                          onTap: () {
+                            _submit();
+                          },
                           child: Container(
                             height: 50.0,
                             child: Center(

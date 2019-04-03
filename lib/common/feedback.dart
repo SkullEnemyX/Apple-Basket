@@ -21,7 +21,6 @@ class FeedInfo extends StatefulWidget {
 class _FeedInfoState extends State<FeedInfo> {
   final formKey = new GlobalKey<FormState>();
   UserData userData = UserData();
-  AnimationController _loginButtonController;
   Animation<double> buttonSqueezeAnimation;
   bool _isobscured = true;
   Color _eyeButtonColor = Colors.grey;

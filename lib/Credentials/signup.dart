@@ -1,6 +1,6 @@
 //import 'package:apple/Credentials/signin.dart';
 import 'dart:async';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:apple/broker/broker.dart';
 import 'package:apple/farmer/farmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,8 +39,8 @@ class Userauthentication {
 }
 
 class Signup extends StatefulWidget {
-  String usertype;
-  Signup({this.usertype});
+  final String usertype;
+  Signup({this.usertype= 'Default'});
   @override
   _SignupState createState() => _SignupState();
 }
@@ -49,12 +49,16 @@ class _SignupState extends State<Signup> {
   final formKey = new GlobalKey<FormState>();
   UserData userData = new UserData();
   final Userauthentication userAuth = new Userauthentication();
-  AnimationController _loginButtonController;
+  bool signinInitiated = false;
   Animation<double> buttonSqueezeAnimation;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _isobscured = true;
   Color _eyeButtonColor = Colors.grey;
 
   void _submit() {
+    setState(() {
+      signinInitiated = true;
+    });
     final form = formKey.currentState;
 
     if (form.validate()) {
@@ -81,23 +85,49 @@ class _SignupState extends State<Signup> {
         documentReference.setData(userinfo).whenComplete(() {
           print("Document Added");
         }).catchError((e) => print(e));
+        setState(() {
+          signinInitiated = false;
+          final snackbar1 = new SnackBar(
+            content: Center(
+              child:
+                  Text("Sign up successful\nWelcome, ${userData.displayName}"),
+            ), //replace name with database name.
+          );
+          _scaffoldKey.currentState.showSnackBar(snackbar1);
+        });
         Timer(
             Duration(milliseconds: 400),
             () => widget.usertype == "Farmer"
                 ? Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Farmer(
-                      name: userData.displayName,
-                      email: userData.email,
-                    )))
-                : Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Broker(
-                      name: userData.displayName,
-                      email: userData.email,
-                    ))));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Farmer(
+                              name: userData.displayName,
+                              email: userData.email,
+                            )))
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Broker(
+                              name: userData.displayName,
+                              email: userData.email,
+                            ))));
       } catch (e) {
+        error = e.toString().split("(");
+      error = error[1].toString().split(",");
+      final snackbar2 = new SnackBar(
+        content: Text("Sign in failed!\nReason: ${error[1].toString()}"),
+      );
+        _scaffoldKey.currentState.showSnackBar(snackbar2);
         print('Error: $e');
       }
     } else {
+      final snackbar1 = new SnackBar(
+        content: Center(
+          child: Text("Sign up failed"),
+        ), //replace name with database name.
+      );
+      _scaffoldKey.currentState.showSnackBar(snackbar1);
       print("Failed");
     }
   }
@@ -108,6 +138,7 @@ class _SignupState extends State<Signup> {
     double width = MediaQuery.of(context).size.width;
     return Center(
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.0,
@@ -248,7 +279,18 @@ class _SignupState extends State<Signup> {
                           ),
                         ),
                         SizedBox(
-                          height: 50.0,
+                          height: 30.0,
+                        ),
+                        signinInitiated
+                            ? SpinKitRing(
+                                color: Colors.redAccent,
+                                lineWidth: 3.0,
+                              )
+                            : SizedBox(
+                                height: 0.0,
+                              ),
+                        SizedBox(
+                          height: 30.0,
                         ),
                         Material(
                           color: Colors.red,

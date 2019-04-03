@@ -24,7 +24,6 @@ class _FarmerState extends State<Farmer> {
   List currencies;
   @override
   void initState(){
-    // TODO: implement initState
     super.initState();
     fetch();
   }
@@ -51,16 +50,16 @@ class _FarmerState extends State<Farmer> {
     else if(ind ==1)
     return Newstile();
     else if(ind ==2)
-    return CryptoListWidget(currencies);
+    return Prices();
     else 
     return Container();
     }
     else if(id==2)
     {
-      return FeedInfo();
+      return Container();
     }
     else
-    return FeedInfo();
+    return Container();
   }
 
   @override
@@ -165,9 +164,7 @@ class _FarmerState extends State<Farmer> {
           ),
           InkWell(
             onTap: (){
-              setState(() {
-                bodySection = 2;
-              });
+              bodySection = 2;
             },
                       child: Menubutton(
               name: "Settings",

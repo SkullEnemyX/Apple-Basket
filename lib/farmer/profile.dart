@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:apple/farmer/farmer.dart';
 
 class Menubutton extends StatefulWidget {
   final String name;
-  double fontsize = 20.0;
-  bool isSelected = false;
+  final double fontsize;
+  final bool isSelected;
   final IconData icon;
-  Menubutton({this.fontsize, this.icon, this.isSelected, this.name});
+  Menubutton({this.fontsize, this.icon, this.isSelected = false, this.name});
   @override
   _MenubuttonState createState() => _MenubuttonState();
 }
@@ -29,7 +28,8 @@ class _MenubuttonState extends State<Menubutton> {
 }
 
 class Maindrawer extends StatefulWidget {
-  Function(String) onMenuItemSelected;
+  final Function(String) onMenuItemSelected;
+  Maindrawer(this.onMenuItemSelected);
   @override
   _MaindrawerState createState() => _MaindrawerState();
 }

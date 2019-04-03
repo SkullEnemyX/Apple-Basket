@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:apple/Credentials/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 void main() => runApp(APPle());
 
