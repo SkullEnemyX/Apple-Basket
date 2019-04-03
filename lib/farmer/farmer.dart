@@ -1,12 +1,11 @@
 import 'package:apple/farmer/dashboard.dart';
 import 'package:apple/farmer/news.dart';
-import 'package:apple/farmer/prices.dart';
+import 'package:apple/farmer/pricefarmer.dart';
 import 'package:apple/farmer/profile.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:apple/common/feedback.dart';
 class Farmer extends StatefulWidget {
   final String name;
   final String email;
@@ -50,7 +49,7 @@ class _FarmerState extends State<Farmer> {
     else if(ind ==1)
     return Newstile();
     else if(ind ==2)
-    return Prices();
+    return Price();
     else 
     return Container();
     }
