@@ -70,4 +70,5 @@ build/
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
-android/app/google-services.json
+#Ignoring files by me
+**/android/app/google-services.json
